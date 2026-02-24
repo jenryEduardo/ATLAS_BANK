@@ -18,7 +18,6 @@ class ServiceRepoImplements @Inject constructor(
         val response = api.GetDataUser(id)
         return response.toDomain()
     }
-
     override suspend fun login(user: LoginDTO): Response_userBank {
         val response = api.Login(user)
         return response.toDomain()
