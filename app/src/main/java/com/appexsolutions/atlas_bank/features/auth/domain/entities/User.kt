@@ -4,7 +4,7 @@ data class User(
     val name : String,
     val wallet : Float,
     val name_card : String,
-    val num_card : Int,
+    val num_card : Long,
     val expires : String,
     val card_holder : String,
     val concept : String,

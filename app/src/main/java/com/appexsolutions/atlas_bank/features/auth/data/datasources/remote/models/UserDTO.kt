@@ -1,15 +1,15 @@
 package com.appexsolutions.atlas_bank.features.auth.data.datasources.remote.models
 
 data class UserDTO(
-    val name : String,
-    val wallet : Float,
-    val card : Card,
+    val name: String,
+    val wallet: Float,
+    val card: Card,
     val recentlyInf: Recently_inf
 )
 
 data class Card(
     val name_card : String,
-    val num_card : Int,
+    val num_card : Long,
     val expires : String,
     val card_holder : String
 )

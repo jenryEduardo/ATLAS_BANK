@@ -17,8 +17,9 @@ object NetworkModule {
     @Singleton
     @AtlasBankRetrofit
     fun provideRetrofit(): Retrofit{
+        // TODO: Reemplaza esta URL con la de tu API real antes de ejecutar
         return Retrofit.Builder()
-            .baseUrl("https://example.com")
+            .baseUrl("https://your-api-url.com/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
