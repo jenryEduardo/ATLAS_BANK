@@ -35,24 +35,36 @@ class DashboardViewModel @Inject constructor(
     private var webSocket: AtlasBankWebSocket? = null
 
     fun setUser(user: User) {
-        _uiState.value = _uiState.value.copy(user = user)
+        if (_uiState.value.user == null) {
+            _uiState.value = _uiState.value.copy(user = user)
+        }
         connectWebSocket()
     }
 
     private fun connectWebSocket() {
-        val cuentaId = sessionManager.getCuentaId() ?: return
-
+        if (webSocket?.isOpen == true) {
+            android.util.Log.d("DashboardVM", "WS ya esta conectado, ignorando reconexion")
+            return
+        }
+        val cuentaId = sessionManager.getCuentaId()
+        if (cuentaId == null) {
+            android.util.Log.e("DashboardVM", "No se pudo conectar WS: cuentaId es null")
+            return
+        }
+        webSocket?.close()
+        android.util.Log.d("DashboardVM", "Conectando WS con cuentaId=$cuentaId")
         webSocket = AtlasBankWebSocket(
             serverUri = URI("ws://3.85.155.29:3000"),
             cuentaId = cuentaId,
             onTransferReceived = {
-                refreshDashboard() // 👈 solo refrescar
+                android.util.Log.d("DashboardVM", "onTransferReceived disparado, llamando refreshDashboard()")
+                refreshDashboard()
             }
         )
         webSocket?.connect()
     }
 
-    private fun refreshDashboard() {
+    fun refreshDashboard() {
         viewModelScope.launch {
             val email = sessionManager.getEmail() ?: return@launch
             val password = sessionManager.getPassword() ?: return@launch
@@ -60,6 +72,8 @@ class DashboardViewModel @Inject constructor(
             val result = loginUseCase(Login(email = email, password = password))
             result.onSuccess { updatedUser ->
                 _uiState.value = _uiState.value.copy(user = updatedUser)
+            }.onFailure { error ->
+                android.util.Log.e("DashboardVM", "Error al refrescar datos: ${error.message}", error)
             }
         }
     }

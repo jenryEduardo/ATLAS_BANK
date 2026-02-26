@@ -122,10 +122,8 @@ fun AppNavigation() {
         composable(route = "transfer_success") {
             TransferSuccessScreen(
                 onDone = {
-                    transferViewModel.resetState() // 👈 limpia el estado al terminar
-                    navController.navigate("dashboard") {
-                        popUpTo("dashboard") { inclusive = true }
-                    }
+                    transferViewModel.resetState()
+                    navController.popBackStack("dashboard", false)
                 }
             )
         }
