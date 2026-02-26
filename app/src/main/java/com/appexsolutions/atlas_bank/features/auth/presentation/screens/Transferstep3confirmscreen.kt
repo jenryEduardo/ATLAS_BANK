@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.appexsolutions.atlas_bank.features.auth.presentation.components.StepIndicator
 
 // ─── Colors ────────────────────────────────────────────────────────────────────
 private val BgDark        = Color(0xFF0E0E0E)
@@ -32,9 +33,10 @@ private val DividerColor  = Color(0xFF2A2A2A)
 // ─── Screen ────────────────────────────────────────────────────────────────────
 @Composable
 fun TransferStep3ConfirmScreen(
-    recipientSuffix: String = "2167",
+    recipientName: String = "",
     amount: String = "33.00",
     fromAccount: String = "Atlas Bank •••• ----",
+    isLoading: Boolean = false,
     onBack: () -> Unit = {},
     onConfirm: () -> Unit = {}
 ) {
@@ -114,7 +116,7 @@ fun TransferStep3ConfirmScreen(
             ) {
                 DetailRow(
                     label = "RECIPIENT",
-                    value = "•••• $recipientSuffix",
+                    value = recipientName,
                     valueStyle = TextStyle(
                         color = TextPrimary,
                         fontSize = 16.sp,
@@ -154,22 +156,18 @@ fun TransferStep3ConfirmScreen(
 
         // ── Confirm Button ───────────────────────────────────────────────────
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 16.dp)
-                .height(52.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(GoldAccent)
-                .clickable { onConfirm() },
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 16.dp)
+                .height(52.dp).clip(RoundedCornerShape(8.dp))
+                .background(if (isLoading) Color(0xFF6B5A2A) else GoldAccent)
+                .clickable(enabled = !isLoading) { onConfirm() },
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = "CONFIRM TRANSFER",
-                color = BgDark,
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 1.5.sp
-            )
+            if (isLoading) {
+                CircularProgressIndicator(color = GoldAccent, modifier = Modifier.size(24.dp))
+            } else {
+                Text("CONFIRM TRANSFER", color = BgDark,
+                    fontSize = 13.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.5.sp)
+            }
         }
     }
 }

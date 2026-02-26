@@ -22,6 +22,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.appexsolutions.atlas_bank.features.auth.presentation.components.StepIndicator
 
 // ─── Colors ────────────────────────────────────────────────────────────────────
 private val BgDark        = Color(0xFF0E0E0E)
@@ -38,7 +39,7 @@ private val DividerColor  = Color(0xFF2A2A2A)
 @Composable
 fun TransferStep2AmountScreen(
     onBack: () -> Unit = {},
-    onContinue: (String) -> Unit = {}
+    onContinue: (amount: String, concept: String) -> Unit = { _, _ -> }
 ) {
     var amount by remember { mutableStateOf("") }
     var concept by remember { mutableStateOf("") }
@@ -195,22 +196,14 @@ fun TransferStep2AmountScreen(
 
         // ── Continue Button ──────────────────────────────────────────────────
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 16.dp)
-                .height(52.dp)
-                .clip(RoundedCornerShape(8.dp))
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 16.dp)
+                .height(52.dp).clip(RoundedCornerShape(8.dp))
                 .background(if (hasAmount) GoldAccent else GoldDisabled)
-                .clickable(enabled = hasAmount) { onContinue(amount) },
+                .clickable(enabled = hasAmount) { onContinue(amount, concept) }, // 👈
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = "CONTINUE",
-                color = if (hasAmount) BgDark else TextMuted,
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 1.5.sp
-            )
+            Text("CONTINUE", color = if (hasAmount) BgDark else TextMuted,
+                fontSize = 13.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.5.sp)
         }
     }
 }

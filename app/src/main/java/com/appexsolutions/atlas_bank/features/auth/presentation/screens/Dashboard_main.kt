@@ -216,7 +216,7 @@ private fun BalanceSection(balance: Float) {
 // ─── Bank Card ─────────────────────────────────────────────────────────────────
 @Composable
 private fun BankCardSection(user: User) {
-    val last4 = user.num_card.toString().takeLast(4)
+    val last4 = user.num_card.takeLast(4)
 
     Box(
         modifier = Modifier

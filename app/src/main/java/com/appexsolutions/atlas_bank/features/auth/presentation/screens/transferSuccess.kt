@@ -18,6 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.appexsolutions.atlas_bank.features.auth.presentation.components.StepIndicator
 
 // ─── Colors ────────────────────────────────────────────────────────────────────
 private val BgDark        = Color(0xFF0E0E0E)
