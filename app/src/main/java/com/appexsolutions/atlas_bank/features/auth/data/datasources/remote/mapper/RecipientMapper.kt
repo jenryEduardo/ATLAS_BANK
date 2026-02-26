@@ -5,7 +5,7 @@ import com.appexsolutions.atlas_bank.features.auth.domain.entities.Recipient
 
 // data/mapper/RecipientMapper.kt
 fun UserListDTO.toRecipient(): Recipient = Recipient(
-    id = this.id,
+    id = this.cuentaId ?: this.id,
     name = "${this.nombre ?: ""} ${this.apellidoPaterno ?: ""}".trim(),
     email = this.email ?: ""
 )

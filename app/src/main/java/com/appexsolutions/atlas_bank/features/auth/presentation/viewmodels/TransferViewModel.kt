@@ -3,6 +3,7 @@ package com.appexsolutions.atlas_bank.features.auth.presentation.viewmodels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.appexsolutions.atlas_bank.core.session.SessionManager
 import com.appexsolutions.atlas_bank.features.auth.domain.entities.Recipient
 import com.appexsolutions.atlas_bank.features.auth.domain.entities.TransferRequest
 import com.appexsolutions.atlas_bank.features.auth.domain.usescases.GetUsersUseCase
@@ -20,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class TransferViewModel @Inject constructor(
     private val getUsersUseCase: GetUsersUseCase,
-    private val transferUseCase: TransferUseCase
+    private val transferUseCase: TransferUseCase,
+    private val sessionManager: SessionManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TransferUiState())
@@ -30,17 +32,19 @@ class TransferViewModel @Inject constructor(
     val events: SharedFlow<TransferEvent> = _events.asSharedFlow()
 
     fun loadUsers() {
+        val currentCuentaId = sessionManager.getCuentaId()
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true)
             getUsersUseCase()
                 .onSuccess { users ->
-                    Log.d("TRANSFER", "Usuarios recibidos: ${users.size}")
-                    users.forEach { user ->
-                        Log.d("TRANSFER", "Recipient: name=${user.name}, email=${user.email}")
+                    val filtered = users.filter { it.id != currentCuentaId }
+                    Log.d("TRANSFER", "Usuarios recibidos: ${users.size}, mostrados: ${filtered.size} (excluye cuentaId=$currentCuentaId)")
+                    filtered.forEach { user ->
+                        Log.d("TRANSFER", "Recipient: id=${user.id}, name=${user.name}")
                     }
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
-                        users = users
+                        users = filtered
                     )
                 }
                 .onFailure { e ->
@@ -69,10 +73,16 @@ class TransferViewModel @Inject constructor(
         _uiState.value = TransferUiState()
     }
 
-    fun confirmTransfer(fromUserId: String) {
+    fun confirmTransfer() {
+        val fromUserId = sessionManager.getCuentaId() ?: run {
+            Log.e("TRANSFER", "No se encontró cuentaId en sesión")
+            return
+        }
         val state = _uiState.value
         val recipient = state.selectedRecipient ?: return
         val amount = state.amount.toFloatOrNull() ?: return
+
+        Log.d("TRANSFER", "Enviando transferencia: origen=$fromUserId destino=${recipient.id} monto=$amount")
 
         val saldoAnterior = state.currentBalance
         _uiState.value = _uiState.value.copy(

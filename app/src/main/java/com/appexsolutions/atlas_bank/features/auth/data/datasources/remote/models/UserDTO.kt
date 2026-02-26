@@ -3,11 +3,13 @@ package com.appexsolutions.atlas_bank.features.auth.data.datasources.remote.mode
 import com.google.gson.annotations.SerializedName
 
 data class UserDTO(
-    val id: String,           // 👈 String, el JSON devuelve UUID
+    val id: String,
+    @SerializedName("cuenta_id")
+    val cuentaId: String?,
     val name: String?,
     val wallet: Float,
     val card: Card?,
-    @SerializedName("recently_inf")  // 👈 esto es lo que rompe todo
+    @SerializedName("recently_inf")
     val recentlyInf: Recently_inf?
 )
 

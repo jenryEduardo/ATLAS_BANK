@@ -1,11 +1,12 @@
 package com.appexsolutions.atlas_bank.features.auth.domain.entities
 
 data class User(
-    val id: String,           // 👈 String
+    val id: String,
+    val cuentaId: String,
     val name: String,
     val wallet: Float,
     val name_card: String,
-    val num_card: String,     // 👈 String
+    val num_card: String,
     val expires: String,
     val card_holder: String,
     val concept: String,

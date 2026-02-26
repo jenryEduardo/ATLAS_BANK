@@ -1,6 +1,7 @@
 package com.appexsolutions.atlas_bank.features.auth.data.repositories
 
 import android.util.Log
+import com.appexsolutions.atlas_bank.core.session.SessionManager
 import com.appexsolutions.atlas_bank.features.auth.data.datasources.remote.api.AtlasBankAPI
 import com.appexsolutions.atlas_bank.features.auth.data.datasources.remote.mapper.toDTO
 import com.appexsolutions.atlas_bank.features.auth.data.datasources.remote.mapper.toDomain
@@ -18,7 +19,8 @@ import com.appexsolutions.atlas_bank.features.auth.domain.repositories.AtlasBanc
 import javax.inject.Inject
 
 class ServiceRepoImplements @Inject constructor(
-    private val api: AtlasBankAPI
+    private val api: AtlasBankAPI,
+    private val sessionManager: SessionManager
 ) : AtlasBanckRepository {
 
     override suspend fun getUser(): List<Recipient> {
@@ -36,7 +38,12 @@ class ServiceRepoImplements @Inject constructor(
         Log.d("REPO", "Enviando login: $dto")
         val response = api.Login(dto)
         Log.d("REPO", "Respuesta raw: id=${response.id}, name=${response.name}, wallet=${response.wallet}, card=${response.card}")
-        return response.toDomain()
+        val domainUser = response.toDomain()
+        sessionManager.saveUserId(domainUser.id)
+        if (domainUser.cuentaId.isNotEmpty()) {
+            sessionManager.saveCuentaId(domainUser.cuentaId)
+        }
+        return domainUser
     }
 
     override suspend fun register(user: Register): Response_userBank {
