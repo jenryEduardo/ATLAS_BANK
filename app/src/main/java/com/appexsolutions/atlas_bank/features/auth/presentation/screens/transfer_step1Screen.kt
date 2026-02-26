@@ -90,7 +90,7 @@ fun TransferStep1RecipientScreen(
                 users.forEach { recipient ->
                     ContactItem(
                         name = recipient.name,
-                        email = recipient.email,
+                        email = recipient.id,
                         isSelected = selectedUser == recipient,
                         onClick = { selectedUser = recipient }
                     )
@@ -147,13 +147,3 @@ private fun ContactItem(
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFF0E0E0E, showSystemUi = true)
-@Composable
-fun TransferStep1Preview() {
-    TransferStep1RecipientScreen(
-        users = listOf(
-            Recipient("1", "Alexander Morgan", "alexander@example.com"),
-            Recipient("2", "Jenry Gomez", "chenry@gmail.com")
-        )
-    )
-}
