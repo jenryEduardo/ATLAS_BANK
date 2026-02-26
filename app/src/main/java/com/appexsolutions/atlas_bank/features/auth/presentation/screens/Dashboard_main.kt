@@ -141,7 +141,7 @@ private fun HeaderSection(name: String) {
     ) {
         Column {
             Text(
-                text = "GOOD EVENING",
+                text = "BUEN DIA",
                 color = TextSecondary,
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Medium,
@@ -180,7 +180,7 @@ private fun BalanceSection(balance: Float) {
         modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp)
     ) {
         Text(
-            text = "TOTAL BALANCE",
+            text = "SALDO TOTAL",
             color = TextSecondary,
             fontSize = 11.sp,
             fontWeight = FontWeight.Medium,
@@ -296,7 +296,7 @@ private fun BankCardSection(user: User) {
                 }
                 Column(horizontalAlignment = Alignment.End) {
                     Text(
-                        text = "EXPIRES",
+                        text = "EXPIRACIÓN",
                         color = TextMuted,
                         fontSize = 9.sp,
                         letterSpacing = 1.sp
@@ -324,18 +324,18 @@ private fun ActionButtonsSection(onSendClick: () -> Unit) {
     ) {
         ActionButton(
             icon = Icons.Default.Send,
-            label = "SEND",
+            label = "ENVIAR",
             modifier = Modifier.weight(1f),
             onClick = onSendClick
         )
         ActionButton(
             icon = Icons.Default.KeyboardArrowDown,
-            label = "RECEIVE",
+            label = "RECIBIR",
             modifier = Modifier.weight(1f)
         )
         ActionButton(
             icon = Icons.Default.CreditCard,
-            label = "PAY",
+            label = "PAGAR",
             modifier = Modifier.weight(1f)
         )
     }
@@ -390,14 +390,14 @@ private fun RecentActivityHeader() {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "RECENT ACTIVITY",
+            text = "ACTIVIDAD RECIENTE",
             color = TextPrimary,
             fontSize = 11.sp,
             fontWeight = FontWeight.Bold,
             letterSpacing = 1.5.sp
         )
         Text(
-            text = "VIEW ALL",
+            text = "VER TODO",
             color = TextSecondary,
             fontSize = 11.sp,
             fontWeight = FontWeight.Medium,

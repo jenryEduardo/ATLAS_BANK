@@ -135,7 +135,7 @@ fun LoginScreen(
                 )
             } else {
                 Text(
-                    text = "ENTER",
+                    text = "INICIAR SESIÓN",
                     color = BgDark,
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Bold,
@@ -148,7 +148,7 @@ fun LoginScreen(
 
         // ── Forgot Password ───────────────────────────────────────────────────
         Text(
-            text = "FORGOT PASSWORD?",
+            text = "¿OLVIDASTE TU CONTRASEÑA?",
             color = TextSecondary,
             fontSize = 11.sp,
             fontWeight = FontWeight.Medium,
@@ -212,7 +212,7 @@ private fun PasswordInputField(
 ) {
     Column {
         Text(
-            text = "PASSWORD",
+            text = "CONTRASEÑA",
             color = TextSecondary,
             fontSize = 10.sp,
             fontWeight = FontWeight.Medium,
@@ -244,7 +244,7 @@ private fun PasswordInputField(
                     Icons.Default.VisibilityOff
                 else
                     Icons.Default.Visibility,
-                contentDescription = if (passwordVisible) "Hide password" else "Show password",
+                contentDescription = if (passwordVisible) "Ocultar contraseña" else "Mostrar contraseña",
                 tint = TextSecondary,
                 modifier = Modifier
                     .size(20.dp)
