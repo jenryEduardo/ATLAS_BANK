@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material.icons.filled.TrendingUp
 import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.ui.tooling.preview.Preview
 import com.appexsolutions.atlas_bank.features.auth.domain.entities.User
 import com.appexsolutions.atlas_bank.features.auth.presentation.viewmodels.DashboardUiState
 
@@ -451,4 +452,11 @@ private fun TransactionItem(transaction: Transaction) {
             )
         }
     }
+}
+
+
+@Preview
+@Composable
+fun previewApp(){
+    BankingDashboardScreen()
 }

@@ -12,7 +12,7 @@ import retrofit2.http.Path
 interface AtlasBankAPI {
 
     @POST("auth/login")
-    suspend fun Login(@Body body: LoginDTO): BankResponse
+    suspend fun Login(@Body body: LoginDTO): UserDTO
 
     @POST("auth/register")
     suspend fun Register(@Body body: RegisterDTO): BankResponse

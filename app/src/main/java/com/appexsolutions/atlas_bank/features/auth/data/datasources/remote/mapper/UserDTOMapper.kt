@@ -5,6 +5,7 @@ import com.appexsolutions.atlas_bank.features.auth.domain.entities.User
 
 fun UserDTO.toDomain(): User {
     return User(
+        id = this.id,
         name = this.name,
         wallet = this.wallet,
         name_card = this.card.name_card,

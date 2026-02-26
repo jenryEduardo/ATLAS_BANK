@@ -1,6 +1,7 @@
 package com.appexsolutions.atlas_bank.features.auth.data.datasources.remote.models
 
 data class UserDTO(
+    val id : Long,
     val name: String,
     val wallet: Float,
     val card: Card,

@@ -7,6 +7,6 @@ import com.appexsolutions.atlas_bank.features.auth.domain.entities.User
 
 interface AtlasBanckRepository {
     suspend fun getUser(id: Int): User
-    suspend fun login(user: Login): Response_userBank
+    suspend fun login(user: Login): User
     suspend fun register(user: Register): Response_userBank
 }

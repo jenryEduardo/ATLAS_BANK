@@ -19,7 +19,7 @@ class ServiceRepoImplements @Inject constructor(
         return api.GetDataUser(id).toDomain()
     }
 
-    override suspend fun login(user: Login): Response_userBank {
+    override suspend fun login(user: Login): User {
         return api.Login(user.toLoginRequest()).toDomain()
     }
 
