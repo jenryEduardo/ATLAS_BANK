@@ -56,7 +56,7 @@ fun TransferStep1RecipientScreen(
             ) {
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
+                    contentDescription = "Atras",
                     tint = GoldAccent,
                     modifier = Modifier.size(18.dp)
                 )
@@ -77,7 +77,7 @@ fun TransferStep1RecipientScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                "REGISTERED CONTACTS", color = TextSecondary, fontSize = 10.sp,
+                "CONTACTOS RECIENTES", color = TextSecondary, fontSize = 10.sp,
                 fontWeight = FontWeight.Medium, letterSpacing = 1.2.sp
             )
             Spacer(modifier = Modifier.height(10.dp))

@@ -78,7 +78,7 @@ fun TransferStep2AmountScreen(
             }
             Spacer(modifier = Modifier.width(12.dp))
             Text(
-                text = "Transfer",
+                text = "Transferir",
                 color = TextPrimary,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold
@@ -97,14 +97,14 @@ fun TransferStep2AmountScreen(
                 .padding(horizontal = 16.dp)
         ) {
             Text(
-                text = "Enter Amount",
+                text = "Ingresar monto",
                 color = TextPrimary,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(4.dp))
             Row {
-                Text(text = "Available balance: ", color = TextSecondary, fontSize = 12.sp)
+                Text(text = "Saldo disponible: ", color = TextSecondary, fontSize = 12.sp)
                 Text(text = "Atlas Bank", color = GoldAccent, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
             }
 
@@ -151,7 +151,7 @@ fun TransferStep2AmountScreen(
 
             // ── Concept ──────────────────────────────────────────────────────
             Text(
-                text = "CONCEPT (OPTIONAL)",
+                text = "CONCEPTO (OPCIONAL)",
                 color = TextSecondary,
                 fontSize = 10.sp,
                 fontWeight = FontWeight.Medium,
@@ -165,7 +165,7 @@ fun TransferStep2AmountScreen(
                 cursorBrush = SolidColor(GoldAccent),
                 decorationBox = { innerTextField ->
                     if (concept.isEmpty()) {
-                        Text(text = "Add a note", color = TextMuted, fontSize = 14.sp)
+                        Text(text = "Añade una nota", color = TextMuted, fontSize = 14.sp)
                     }
                     innerTextField()
                 },
@@ -202,7 +202,7 @@ fun TransferStep2AmountScreen(
                 .clickable(enabled = hasAmount) { onContinue(amount, concept) }, // 👈
             contentAlignment = Alignment.Center
         ) {
-            Text("CONTINUE", color = if (hasAmount) BgDark else TextMuted,
+            Text("CONTINUAR", color = if (hasAmount) BgDark else TextMuted,
                 fontSize = 13.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.5.sp)
         }
     }
