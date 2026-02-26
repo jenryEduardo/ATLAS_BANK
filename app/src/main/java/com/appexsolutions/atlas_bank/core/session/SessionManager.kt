@@ -27,8 +27,23 @@ class SessionManager @Inject constructor(
         prefs.edit().clear().apply()
     }
 
+    // SessionManager.kt
+    fun saveCredentials(email: String, password: String) {
+        prefs.edit()
+            .putString(KEY_EMAIL, email)
+            .putString(KEY_PASSWORD, password)
+            .apply()
+    }
+
+    fun getEmail(): String? = prefs.getString(KEY_EMAIL, null)
+    fun getPassword(): String? = prefs.getString(KEY_PASSWORD, null)
+
     companion object {
         private const val KEY_USER_ID = "user_id"
         private const val KEY_CUENTA_ID = "cuenta_id"
+        private const val KEY_EMAIL = "email"       // 👈 agregar
+        private const val KEY_PASSWORD = "password" // 👈 agregar
     }
+
+
 }

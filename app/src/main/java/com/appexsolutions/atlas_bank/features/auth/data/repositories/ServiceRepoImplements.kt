@@ -8,6 +8,7 @@ import com.appexsolutions.atlas_bank.features.auth.data.datasources.remote.mappe
 import com.appexsolutions.atlas_bank.features.auth.data.datasources.remote.mapper.toLoginRequest
 import com.appexsolutions.atlas_bank.features.auth.data.datasources.remote.mapper.toRecipient
 import com.appexsolutions.atlas_bank.features.auth.data.datasources.remote.mapper.toRegisterRequest
+import com.appexsolutions.atlas_bank.features.auth.data.datasources.remote.models.LoginDTO
 import com.appexsolutions.atlas_bank.features.auth.domain.entities.Login
 import com.appexsolutions.atlas_bank.features.auth.domain.entities.Recipient
 import com.appexsolutions.atlas_bank.features.auth.domain.entities.Register
@@ -40,6 +41,7 @@ class ServiceRepoImplements @Inject constructor(
         Log.d("REPO", "Respuesta raw: id=${response.id}, name=${response.name}, wallet=${response.wallet}, card=${response.card}")
         val domainUser = response.toDomain()
         sessionManager.saveUserId(domainUser.id)
+        sessionManager.saveCredentials(user.email, user.password)
         if (domainUser.cuentaId.isNotEmpty()) {
             sessionManager.saveCuentaId(domainUser.cuentaId)
         }
@@ -48,5 +50,11 @@ class ServiceRepoImplements @Inject constructor(
 
     override suspend fun register(user: Register): Response_userBank {
         return api.Register(user.toRegisterRequest()).toDomain()
+    }
+
+    override suspend fun refreshDashboard(email: String, password: String): User {
+        val dto = LoginDTO(email = email, password = password)
+        val response = api.Login(dto)
+        return response.toDomain()
     }
 }
