@@ -48,7 +48,7 @@ fun TransferSuccessScreen(
         ) {
             Spacer(modifier = Modifier.width(36.dp))
             Text(
-                text = "Transfer",
+                text = "Transferir",
                 color = TextPrimary,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold,
@@ -83,7 +83,7 @@ fun TransferSuccessScreen(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Check,
-                        contentDescription = "Success",
+                        contentDescription = "Exito",
                         tint = GoldAccent,
                         modifier = Modifier.size(36.dp)
                     )
@@ -92,7 +92,7 @@ fun TransferSuccessScreen(
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Text(
-                    text = "Transfer Successful",
+                    text = "Transferencia exitosa",
                     color = TextPrimary,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
@@ -101,7 +101,7 @@ fun TransferSuccessScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "Your transfer has been processed",
+                    text = "Tu transferencia fue procesada",
                     color = TextSecondary,
                     fontSize = 13.sp
                 )
@@ -120,7 +120,7 @@ fun TransferSuccessScreen(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "DONE",
+                text = "HECHO",
                 color = BgDark,
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Bold,

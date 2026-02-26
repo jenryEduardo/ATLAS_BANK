@@ -65,14 +65,14 @@ fun TransferStep3ConfirmScreen(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
+                    contentDescription = "REGRESAR",
                     tint = GoldAccent,
                     modifier = Modifier.size(18.dp)
                 )
             }
             Spacer(modifier = Modifier.width(12.dp))
             Text(
-                text = "Transfer",
+                text = "Transferir",
                 color = TextPrimary,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold
@@ -91,14 +91,14 @@ fun TransferStep3ConfirmScreen(
                 .padding(horizontal = 16.dp)
         ) {
             Text(
-                text = "Confirm Transfer",
+                text = "Confirmar transferencia",
                 color = TextPrimary,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Review the details before confirming",
+                text = "Revisa los detalles antes de continuar",
                 color = TextSecondary,
                 fontSize = 12.sp
             )
@@ -115,7 +115,7 @@ fun TransferStep3ConfirmScreen(
                     .padding(horizontal = 20.dp, vertical = 20.dp)
             ) {
                 DetailRow(
-                    label = "RECIPIENT",
+                    label = "CONTENIDO",
                     value = recipientName,
                     valueStyle = TextStyle(
                         color = TextPrimary,
@@ -129,7 +129,7 @@ fun TransferStep3ConfirmScreen(
                     thickness = 1.dp
                 )
                 DetailRow(
-                    label = "AMOUNT",
+                    label = "MONTO",
                     value = "\$$amount",
                     valueStyle = TextStyle(
                         color = GoldAccent,
@@ -143,7 +143,7 @@ fun TransferStep3ConfirmScreen(
                     thickness = 1.dp
                 )
                 DetailRow(
-                    label = "FROM",
+                    label = "DE",
                     value = fromAccount,
                     valueStyle = TextStyle(
                         color = TextPrimary,
@@ -165,7 +165,7 @@ fun TransferStep3ConfirmScreen(
             if (isLoading) {
                 CircularProgressIndicator(color = GoldAccent, modifier = Modifier.size(24.dp))
             } else {
-                Text("CONFIRM TRANSFER", color = BgDark,
+                Text("CONFIRMAR TRANSFERIR", color = BgDark,
                     fontSize = 13.sp, fontWeight = FontWeight.Bold, letterSpacing = 1.5.sp)
             }
         }
