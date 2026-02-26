@@ -95,7 +95,7 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)                    // Integración con Jetpack Compose
     ksp(libs.hilt.compiler)                                         // KSP
-
+    implementation(libs.java.websocket)                             // WebSockets
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
