@@ -92,7 +92,8 @@ dependencies {
     implementation(libs.androidx.navigation.compose)                // Navigation
     implementation(libs.androidx.compose.material.icons.extended)   // Icons extendend
     implementation(libs.hilt.android)                               // Implementación de Hilt
-    implementation(libs.hilt.navigation.compose)                    // Integración con Jetpack Compose
+    implementation(libs.hilt.navigation.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)                    // Integración con Jetpack Compose
     ksp(libs.hilt.compiler)                                         // KSP
 
 

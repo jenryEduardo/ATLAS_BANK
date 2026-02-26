@@ -15,8 +15,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material.icons.Icons
@@ -26,37 +24,83 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.CreditCard
 import androidx.compose.material.icons.filled.TrendingUp
 import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.ui.tooling.preview.Preview
+import com.appexsolutions.atlas_bank.features.auth.domain.entities.User
+import com.appexsolutions.atlas_bank.features.auth.presentation.viewmodels.DashboardUiState
 
 // ─── Color Palette ─────────────────────────────────────────────────────────────
 private val BackgroundDark   = Color(0xFF0E0E0E)
 private val SurfaceDark      = Color(0xFF1A1A1A)
-private val SurfaceMedium    = Color(0xFF222222)
 private val GoldAccent       = Color(0xFFD4A847)
-private val GoldLight        = Color(0xFFE8C66A)
 private val TextPrimary      = Color(0xFFFFFFFF)
 private val TextSecondary    = Color(0xFF888888)
 private val TextMuted        = Color(0xFF555555)
-private val PositiveGreen    = Color(0xFFD4A847)
 private val BorderColor      = Color(0xFF2A2A2A)
 
-// ─── Data Models ───────────────────────────────────────────────────────────────
-data class Transaction(
+// ─── Internal presentation model ───────────────────────────────────────────────
+private data class Transaction(
     val title: String,
     val subtitle: String,
     val amount: String,
     val isPositive: Boolean
 )
 
-// ─── Sample Data ───────────────────────────────────────────────────────────────
-private val sampleTransactions = listOf(
-    Transaction("Transfer to Marcus Chen", "Today, 14:32", "-\$2,450.00", false),
-    Transaction("Deposit", "Yesterday, 09:15", "+\$12,000.00", true),
-    Transaction("Transfer to Sarah Klein", "Feb 22, 16:44", "-\$890.00", false)
-)
+private fun User.toTransaction(): Transaction {
+    val positive = type_inf == "+"
+    val sign = if (positive) "+" else "-"
+    return Transaction(
+        title = concept,
+        subtitle = day_transfer,
+        amount = "$sign\$${"%,.2f".format(mount)}",
+        isPositive = positive
+    )
+}
 
 // ─── Main Screen ───────────────────────────────────────────────────────────────
 @Composable
-fun BankingDashboardScreen() {
+fun BankingDashboardScreen(
+    uiState: DashboardUiState = DashboardUiState(),
+    onSendClick: () -> Unit = {}
+) {
+    when {
+        uiState.isLoading || uiState.user == null && uiState.error == null -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(BackgroundDark),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = GoldAccent)
+            }
+        }
+
+        uiState.error != null -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(BackgroundDark),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = uiState.error,
+                    color = Color(0xFFE57373),
+                    fontSize = 14.sp,
+                    modifier = Modifier.padding(24.dp)
+                )
+            }
+        }
+
+        else -> {
+            val user = uiState.user!!
+            DashboardContent(user = user, onSendClick = onSendClick)
+        }
+    }
+}
+
+@Composable
+private fun DashboardContent(user: User, onSendClick: () -> Unit) {
+    val recentTransaction = user.toTransaction()
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -65,32 +109,21 @@ fun BankingDashboardScreen() {
             .navigationBarsPadding(),
         contentPadding = PaddingValues(bottom = 24.dp)
     ) {
-        // Header
-        item { HeaderSection() }
-
-        // Balance
-        item { BalanceSection() }
-
-        // Card
+        item { HeaderSection(name = user.name) }
+        item { BalanceSection(balance = user.wallet) }
         item {
             Spacer(modifier = Modifier.height(24.dp))
-            BankCardSection()
+            BankCardSection(user = user)
         }
-
-        // Action Buttons
         item {
             Spacer(modifier = Modifier.height(16.dp))
-            ActionButtonsSection()
+            ActionButtonsSection(onSendClick = onSendClick)
         }
-
-        // Recent Activity Header
         item {
             Spacer(modifier = Modifier.height(28.dp))
             RecentActivityHeader()
         }
-
-        // Transactions
-        items(sampleTransactions) { tx ->
+        items(listOf(recentTransaction)) { tx ->
             TransactionItem(transaction = tx)
         }
     }
@@ -98,7 +131,7 @@ fun BankingDashboardScreen() {
 
 // ─── Header ────────────────────────────────────────────────────────────────────
 @Composable
-private fun HeaderSection() {
+private fun HeaderSection(name: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -116,7 +149,7 @@ private fun HeaderSection() {
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = "Alexander Morgan",
+                text = name,
                 color = TextPrimary,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.SemiBold
@@ -142,7 +175,7 @@ private fun HeaderSection() {
 
 // ─── Balance ───────────────────────────────────────────────────────────────────
 @Composable
-private fun BalanceSection() {
+private fun BalanceSection(balance: Float) {
     Column(
         modifier = Modifier.padding(horizontal = 20.dp, vertical = 4.dp)
     ) {
@@ -155,7 +188,7 @@ private fun BalanceSection() {
         )
         Spacer(modifier = Modifier.height(6.dp))
         Text(
-            text = "\$124,580.00",
+            text = "\$%,.2f".format(balance),
             color = TextPrimary,
             fontSize = 36.sp,
             fontWeight = FontWeight.Bold,
@@ -171,7 +204,7 @@ private fun BalanceSection() {
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = "+12.5% this month",
+                text = "Atlas Bank",
                 color = GoldAccent,
                 fontSize = 13.sp,
                 fontWeight = FontWeight.Medium
@@ -182,7 +215,9 @@ private fun BalanceSection() {
 
 // ─── Bank Card ─────────────────────────────────────────────────────────────────
 @Composable
-private fun BankCardSection() {
+private fun BankCardSection(user: User) {
+    val last4 = user.num_card.takeLast(4)
+
     Box(
         modifier = Modifier
             .padding(horizontal = 20.dp)
@@ -191,48 +226,36 @@ private fun BankCardSection() {
             .clip(RoundedCornerShape(16.dp))
             .background(
                 brush = Brush.linearGradient(
-                    colors = listOf(
-                        Color(0xFF1C1C1C),
-                        Color(0xFF141414)
-                    )
+                    colors = listOf(Color(0xFF1C1C1C), Color(0xFF141414))
                 )
             )
             .border(
                 width = 1.dp,
                 brush = Brush.linearGradient(
-                    colors = listOf(
-                        Color(0xFF3A3A3A),
-                        Color(0xFF252525)
-                    )
+                    colors = listOf(Color(0xFF3A3A3A), Color(0xFF252525))
                 ),
                 shape = RoundedCornerShape(16.dp)
             )
     ) {
-        // Subtle gold shimmer accent top-right
         Box(
             modifier = Modifier
                 .size(120.dp)
                 .align(Alignment.TopEnd)
                 .background(
                     brush = Brush.radialGradient(
-                        colors = listOf(
-                            GoldAccent.copy(alpha = 0.07f),
-                            Color.Transparent
-                        )
+                        colors = listOf(GoldAccent.copy(alpha = 0.07f), Color.Transparent)
                     )
                 )
         )
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(20.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            // Bank name
             Column {
                 Text(
-                    text = "ATLAS BANCK",
+                    text = user.name_card.uppercase(),
                     color = GoldAccent,
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Bold,
@@ -244,17 +267,13 @@ private fun BankCardSection() {
                     fontSize = 11.sp
                 )
             }
-
-            // Card number
             Text(
-                text = "• • • •   • • • •   • • • •   8472",
+                text = "• • • •   • • • •   • • • •   $last4",
                 color = TextPrimary.copy(alpha = 0.85f),
                 fontSize = 15.sp,
                 letterSpacing = 2.sp,
                 fontWeight = FontWeight.Medium
             )
-
-            // Cardholder + Expiry
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -268,7 +287,7 @@ private fun BankCardSection() {
                         letterSpacing = 1.sp
                     )
                     Text(
-                        text = "ALEXANDER MORGAN",
+                        text = user.card_holder.uppercase(),
                         color = TextPrimary,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.SemiBold,
@@ -283,7 +302,7 @@ private fun BankCardSection() {
                         letterSpacing = 1.sp
                     )
                     Text(
-                        text = "12/28",
+                        text = user.expires,
                         color = TextPrimary,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.SemiBold
@@ -296,7 +315,7 @@ private fun BankCardSection() {
 
 // ─── Action Buttons ────────────────────────────────────────────────────────────
 @Composable
-private fun ActionButtonsSection() {
+private fun ActionButtonsSection(onSendClick: () -> Unit) {
     Row(
         modifier = Modifier
             .padding(horizontal = 20.dp)
@@ -306,7 +325,8 @@ private fun ActionButtonsSection() {
         ActionButton(
             icon = Icons.Default.Send,
             label = "SEND",
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
+            onClick = onSendClick
         )
         ActionButton(
             icon = Icons.Default.KeyboardArrowDown,
@@ -325,22 +345,29 @@ private fun ActionButtonsSection() {
 private fun ActionButton(
     icon: ImageVector,
     label: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
 ) {
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(12.dp))
             .background(SurfaceDark)
             .border(1.dp, BorderColor, RoundedCornerShape(12.dp))
-            .padding(vertical = 16.dp),
+            .padding(vertical = 16.dp)
+            .then(Modifier.run { this }),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = label,
-            tint = GoldAccent,
+        IconButton(
+            onClick = onClick,
             modifier = Modifier.size(22.dp)
-        )
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = label,
+                tint = GoldAccent,
+                modifier = Modifier.size(22.dp)
+            )
+        }
         Spacer(modifier = Modifier.height(6.dp))
         Text(
             text = label,
@@ -404,7 +431,7 @@ private fun TransactionItem(transaction: Transaction) {
             )
             Text(
                 text = transaction.amount,
-                color = if (transaction.isPositive) PositiveGreen else TextPrimary,
+                color = if (transaction.isPositive) GoldAccent else TextPrimary,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.SemiBold
             )
@@ -427,9 +454,9 @@ private fun TransactionItem(transaction: Transaction) {
     }
 }
 
-// ─── Preview ───────────────────────────────────────────────────────────────────
-@Preview(showBackground = true, backgroundColor = 0xFF0E0E0E, showSystemUi = true)
+
+@Preview
 @Composable
-fun BankingDashboardScreenPreview() {
+fun previewApp(){
     BankingDashboardScreen()
 }
